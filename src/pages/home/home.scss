@@ -1,0 +1,31 @@
+@import "/src/styles/variables.scss";
+
+.home{
+   
+    font-family: $font;
+    .card{
+        padding-block: 2vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2vh;
+
+        .name{
+            font-weight: 700;
+            font-size: large;
+            text-transform: capitalize;
+        }
+
+        .photo {
+            img{
+                height: 120px;
+                width: 120px;
+            }
+        }
+
+    }
+    .card:hover{
+        cursor: pointer;
+    }
+
+}

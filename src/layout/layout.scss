@@ -1,0 +1,13 @@
+@import "/src/styles/variables.scss";
+
+.main{
+    font-family: $font ;
+    .content{
+        display: flex;
+        justify-content: center;
+        padding-block: 8vh;
+        .container{
+            width: 80%;
+        }
+    }
+}

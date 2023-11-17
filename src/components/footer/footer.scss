@@ -1,0 +1,16 @@
+@import "/src/styles/variables.scss";
+.footer{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    background-color: black;
+    height: 10vh;
+    font-family: $font;
+    color: rgb(134, 134, 134);
+    padding-inline: 100px;
+    .names{
+        display: flex;
+        flex-direction: column;
+        
+    }
+}

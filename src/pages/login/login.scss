@@ -1,0 +1,69 @@
+@import "/src/styles/variables.scss";
+
+.login{
+    height: 100vh;
+    background: rgb(2,0,36);
+    background: linear-gradient(207deg, rgba(2,0,36,1) 0%, rgba(230,252,0,1) 0%, rgba(209,0,0,1) 0%, rgba(255,111,0,1) 25%, rgba(255,111,0,1) 75%, rgba(252,211,0,1) 98%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    .login-form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 600px;
+        width: 450px;
+        background-color: white;
+        gap: 50px;
+
+        button{
+            width: 200px;
+            height: 60px;
+            border: 0;
+            background-color: $main-color;
+            color: white;
+            font-size: 2vh;
+            transition: all 0.2s;
+        }
+        button:hover{
+            cursor: pointer;
+            background-color: white;
+            color: $main-color;
+            border: 1px solid $main-color;
+            transition: all 0.2s;
+        }
+
+        .username{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .password{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        input{
+            width: 300px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 24px;
+        }
+
+        .login-icon{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 9vh;
+            color: $main-color;
+            .login-header{
+                font-size: 6vh;
+               
+            }
+        }
+    }
+
+}

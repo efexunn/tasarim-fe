@@ -1,0 +1,42 @@
+@import "/src/styles/variables.scss";
+
+.navbar{
+    display: flex;
+    align-items: center;
+    padding-inline: 5%;
+    height: 8vh;
+    background-color: $main-color;
+    color:white;
+    font-family: $font;
+    
+    .logo{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 2vh;
+       
+    }
+
+    .icons{
+
+        display: flex;
+        align-items: center;
+        padding-left: 80%;
+        font-size: 2.5vh;
+        gap: 20px;
+        .user{
+            display: flex;
+            align-items: center;
+            gap:10px;
+            font-size: 2vh;
+            img{
+             width: 40px;
+             height: 40px;
+             border-radius: 50%;
+            }
+
+         }
+    }
+
+  
+}
