@@ -1,11 +1,34 @@
 import { useEffect, useState } from "react";
 import { LecturerService } from "../../services/LecturerService";
-import { Card } from "antd";
+import { Card, Modal } from "antd";
 import "./home.scss";
+import PersonDetail from "../../components/person-detail/PersonDetail";
 
 const Home = () => {
   let [lecturerList, setLecturerList] = useState<Array<LecturerModel>>([]);
   let lecturerService = new LecturerService();
+  let emptyDoc = {
+    FullName: "",
+    Title: "",
+    Email: "",
+    TelephoneNumber: "",
+    Adress: "",
+    AvesisLink: "string",
+    Id: 0,
+    RowStateId: 0,
+  }
+  let [doctor, setDoctor] = useState<LecturerModel>(emptyDoc)
+  const [open, setOpen] = useState(false);
+  const showModal = (item : LecturerModel) => {
+    setDoctor(item);
+    setOpen(true);
+  };
+  const handleOk = () => {
+    setOpen(false);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   let orn = [
     {
@@ -186,13 +209,28 @@ const Home = () => {
             fontFamily: "Archivo",
           }}
         >
+          <Modal
+          open={open}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={800}
+          okButtonProps={{
+           
+          }}
+          cancelButtonProps={{
+            disabled: true,
+          }}
+          >
+            <PersonDetail doctorObj={doctor}/>
+          </Modal>
           {orn.map((item) => (
             <Card.Grid
               style={{ width: "17%", marginInline: "4%", height: "auto" }}
+              onClick={()=>showModal(item)}
             >
               <div className="card">
                 <div className="photo">
-                  <img src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX25634104.jpg" />
+                  <img src="https://www.acibadem.com.tr/assets/images/doctors/cagri-buke-banner.png" />
                 </div>
                 <div className="name">
                   <span>{item.FullName}</span>

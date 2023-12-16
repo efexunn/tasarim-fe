@@ -1,0 +1,19 @@
+@import "/src/styles/variables.scss";
+.personDetail{
+    display: flex;
+    gap: 5vw;
+    font-family: $font;
+    .image{
+        img{
+            width: 230px;
+            height: 300px;
+        }
+    }
+    .informations{
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+      
+    }
+
+}
