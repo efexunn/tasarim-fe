@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import { LecturerService } from "../../services/LecturerService";
+import { DoctorService } from "../../services/DoctorServices";
 import { Card, Modal } from "antd";
 import "./home.scss";
 import PersonDetail from "../../components/person-detail/PersonDetail";
 
 const Home = () => {
-  let [lecturerList, setLecturerList] = useState<Array<LecturerModel>>([]);
-  let lecturerService = new LecturerService();
+  let [doctorList, setDoctorList] = useState<Array<DoctorModel>>([]);
+  let doctorService = new DoctorService();
   let emptyDoc = {
-    FullName: "",
-    Title: "",
-    Email: "",
-    TelephoneNumber: "",
-    Adress: "",
-    AvesisLink: "string",
-    Id: 0,
-    RowStateId: 0,
+    DoctorName: "",
+        DoctorEmail: "String",
+        DoctorTitle: 1,
+        DoctorTitleName: "String",
+        DoctorHospital: 1,
+        DoctorHospitalName: "string",
+        DoctorPoliclinic: 1,
+        DoctorPoliclinicName: "string",
+        Id: 1,
+        RowStateId: 1
   }
-  let [doctor, setDoctor] = useState<LecturerModel>(emptyDoc)
+  let [doctor, setDoctor] = useState<DoctorModel>(emptyDoc)
   const [open, setOpen] = useState(false);
-  const showModal = (item : LecturerModel) => {
+  const showModal = (item : DoctorModel) => {
     setDoctor(item);
     setOpen(true);
   };
@@ -194,9 +197,8 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    lecturerService
-      .getCengLecturers()
-      .then((response) => setLecturerList(response.data));
+    doctorService.getDoctors().then((response) => {setDoctorList(response.data)})
+      //.then((response) => setLecturerList(response.data));
   }, []);
 
   return (
@@ -223,7 +225,7 @@ const Home = () => {
           >
             <PersonDetail doctorObj={doctor}/>
           </Modal>
-          {orn.map((item) => (
+          {doctorList.map((item) => (
             <Card.Grid
               style={{ width: "17%", marginInline: "4%", height: "auto" }}
               onClick={()=>showModal(item)}
@@ -233,13 +235,13 @@ const Home = () => {
                   <img src="https://www.acibadem.com.tr/assets/images/doctors/cagri-buke-banner.png" />
                 </div>
                 <div className="name">
-                  <span>{item.FullName}</span>
+                  <span>{item.DoctorName}</span>
                 </div>
                 <div className="email">
-                  <span>{item.Email}</span>
+                  <span>{item.DoctorEmail}</span>
                 </div>
                 <div className="phone">
-                  <span>{item.TelephoneNumber}</span>
+                  <span>{item.DoctorPoliclinicName}</span>
                 </div>
               </div>
             </Card.Grid>
