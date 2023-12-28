@@ -2,6 +2,25 @@
 
 .home{
     font-family: $font;
+    .filters{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: 4vh;
+        button{
+            border: 0 solid white;
+            background-color: $main-color;
+            color:white;
+            transition: all 0.2s;
+            height: 40px;
+            width: 100px;
+        }
+        button:hover{
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 90%;
+        }
+    }
     .card{
         padding-block: 2vh;
         display: flex;
