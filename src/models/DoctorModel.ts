@@ -5,6 +5,7 @@ interface DoctorModel{
         DoctorTitleName: String,
         DoctorHospital: number,
         DoctorHospitalName: string,
+        DoctorImageLink:string;
         DoctorPoliclinic: number,
         DoctorPoliclinicName: string,
         Id: number,

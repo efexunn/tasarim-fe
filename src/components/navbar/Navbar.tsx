@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <>
       <div className="navbar">
-        <div className="logo">
+        <div className="logo" onClick={()=> location.href = "/"}>
           <img src="vite.svg" alt="" />
           <span>SCRABBER</span>
         </div>

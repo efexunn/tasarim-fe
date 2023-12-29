@@ -1,0 +1,22 @@
+@import "/src/styles/variables.scss";
+
+.menu{
+    height: 76vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3vh;
+    span{
+        font-family: $font;
+        font-size: 7vh;
+        font-weight: 100;
+        text-transform:uppercase;
+        transition: all 0.3s;
+        color: $main-color;
+    }
+    span:hover{
+        padding-left: 3vw;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+}

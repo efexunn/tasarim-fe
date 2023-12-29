@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { LecturerService } from "../../services/LecturerService";
 import { DoctorService } from "../../services/DoctorServices";
 import { Card, Modal, Select } from "antd";
 import "./home.scss";
@@ -15,6 +14,7 @@ const Home = () => {
     DoctorTitleName: "String",
     DoctorHospital: 1,
     DoctorHospitalName: "string",
+    DoctorImageLink:"string",
     DoctorPoliclinic: 1,
     DoctorPoliclinicName: "string",
     Id: 1,
@@ -150,7 +150,7 @@ const Home = () => {
             >
               <div className="card">
                 <div className="photo">
-                  <img src="https://www.acibadem.com.tr/assets/images/doctors/cagri-buke-banner.png" />
+                  <img src={item.DoctorImageLink} />
                 </div>
                 <div className="name">
                   <span>{item.DoctorName}</span>
