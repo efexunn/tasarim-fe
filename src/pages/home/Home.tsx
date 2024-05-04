@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { DoctorService } from "../../services/DoctorServices";
-import { Card, Modal, Select } from "antd";
+import { DoctorManager } from "../../services/DoctorManager";
+import { Card, Col, Modal, Row, Select } from "antd";
 import "./home.scss";
 import PersonDetail from "../../components/person-detail/PersonDetail";
+import PoliclinicService from "../../services/PoliclinicManager";
+import HospitalManager from "../../services/HospitalManager";
+import TitleManager from "../../services/TitleManager";
+import Meta from "antd/es/card/Meta";
+import { SearchOutlined } from "@ant-design/icons";
 
 const Home = () => {
-  let [doctorList, setDoctorList] = useState<Array<DoctorModel>>([]);
-  let doctorService = new DoctorService();
+  let [doctorList, setDoctorList] = useState<Array<any>>(new Array<any>());
+  let doctorService = new DoctorManager();
   let emptyDoc = {
     DoctorName: "",
     DoctorEmail: "String",
@@ -14,7 +19,7 @@ const Home = () => {
     DoctorTitleName: "String",
     DoctorHospital: 1,
     DoctorHospitalName: "string",
-    DoctorImageLink:"string",
+    DoctorImageLink: "string",
     DoctorPoliclinic: 1,
     DoctorPoliclinicName: "string",
     Id: 1,
@@ -22,6 +27,13 @@ const Home = () => {
   };
   let [doctor, setDoctor] = useState<DoctorModel>(emptyDoc);
   const [open, setOpen] = useState(false);
+  let policlinicService = new PoliclinicService();
+  let hospitalService = new HospitalManager();
+  let titleService = new TitleManager();
+  let [policlinicList, setPoliclinicList] = useState<Array<SelectModel>>();
+  let [hospitalList, setHospitalList] = useState<Array<SelectModel>>();
+  let [titleList, setTitleList] = useState<Array<SelectModel>>();
+
   const showModal = (item: DoctorModel) => {
     setDoctor(item);
     setOpen(true);
@@ -33,56 +45,73 @@ const Home = () => {
     setOpen(false);
   };
 
+  let handleFilter = () => {
+    doctorService
+      .GetDoctorsFiltered(cityCategory, policlinicCategory, titleCategory)
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   useEffect(() => {
-    doctorService.getDoctors().then((response) => {
-      setDoctorList(response.data);
+    doctorService
+      .getDoctors()
+      .then((response) => {
+        setDoctorList(JSON.parse(response.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    policlinicService.GetPoliclinics().then((response: any) => {
+      setPoliclinicList(
+        policlinicService.ConvertPoliclinicsToSelectModel(
+          JSON.parse(response.data)
+        )
+      );
     });
+
+    hospitalService.GetHospitals().then((response: any) => {
+      setHospitalList(
+        hospitalService.ConvertHospitalsToSelectModel(JSON.parse(response.data))
+      );
+    });
+
+    titleService.GetTitles().then((response) => {
+      setTitleList(
+        titleService.ConvertTitlesToSelectModel(JSON.parse(response.data))
+      );
+    });
+
     //.then((response) => setLecturerList(response.data));
   }, []);
 
-  let opts = [
-    {
-      value: "1",
-      label: "Not Identified",
-    },
-    {
-      value: "2",
-      label: "Closed",
-    },
-    {
-      value: "3",
-      label: "Communicated",
-    },
-    {
-      value: "4",
-      label: "Identified",
-    },
-    {
-      value: "5",
-      label: "Resolved",
-    },
-    {
-      value: "6",
-      label: "Cancelled",
-    },
-  ];
+  let [cityCategory, setCityCategory] = useState<any>();
+  let [titleCategory, setTitleCategory] = useState<any>();
+  let [policlinicCategory, setPoliclinicCategory] = useState<any>();
 
-  let [cityCategory, setCityCategory] = useState("Hastane");
-  let [titleCategory, setTitleCategory] = useState("Ünvan");
-  let [policlinicCategory, setPoliclinicCategory] = useState("Poliklinik");
   return (
     <>
       <div className="home">
+        <div className="search-bar">
+          <div className="search-bar-border">
+            <input type="text" />
+            <span>
+              <SearchOutlined />
+            </span>
+          </div>
+        </div>
         <div className="filters">
           <Select
+            allowClear
             showSearch
             style={{ width: 200 }}
-            placeholder="Search to Select"
+            placeholder="Hastane"
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.label ?? "").includes(input)
             }
-            options={opts}
+            options={hospitalList}
             value={cityCategory}
             onChange={(cityCategory) => {
               setCityCategory(cityCategory);
@@ -91,14 +120,15 @@ const Home = () => {
           />
 
           <Select
+            allowClear
             showSearch
             style={{ width: 200 }}
-            placeholder="Search to Select"
+            placeholder="Ünvan"
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.label ?? "").includes(input)
             }
-            options={opts}
+            options={titleList}
             value={titleCategory}
             onChange={(titleCategory) => {
               setTitleCategory(titleCategory);
@@ -107,64 +137,68 @@ const Home = () => {
           />
 
           <Select
+            allowClear
             showSearch
             style={{ width: 200 }}
-            placeholder="Search to Select"
+            placeholder="Poliklinik"
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.label ?? "").includes(input)
             }
-            options={opts}
+            options={policlinicList}
             value={policlinicCategory}
             onChange={(policlinicCategory) => {
               setPoliclinicCategory(policlinicCategory);
               console.log(policlinicCategory);
             }}
           />
-          <button>Filtrele</button>
+          <button onClick={handleFilter}>Filtrele</button>
         </div>
 
-        <Card
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            fontFamily: "Archivo",
+        <Modal
+          open={open}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={800}
+          okButtonProps={{}}
+          cancelButtonProps={{
+            disabled: true,
           }}
         >
-          <Modal
-            open={open}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            width={800}
-            okButtonProps={{}}
-            cancelButtonProps={{
-              disabled: true,
-            }}
-          >
-            <PersonDetail doctorObj={doctor} />
-          </Modal>
-          {doctorList.map((item) => (
-            <Card.Grid
-              style={{ width: "17%", marginInline: "4%", height: "auto" }}
-              onClick={() => showModal(item)}
-            >
-              <div className="card">
-                <div className="photo">
-                  <img src={item.DoctorImageLink} />
-                </div>
-                <div className="name">
-                  <span>{item.DoctorName}</span>
-                </div>
-                <div className="email">
-                  <span>{item.DoctorEmail}</span>
-                </div>
-                <div className="phone">
-                  <span>{item.DoctorPoliclinicName}</span>
-                </div>
-              </div>
-            </Card.Grid>
-          ))}
-        </Card>
+          <PersonDetail doctorObj={doctor} />
+        </Modal>
+
+        <div className="doctor-list">
+          <div style={{ padding: "20px" }}>
+            <Row gutter={[16, 16]}>
+              {doctorList.map((item) => (
+                <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
+                  <Card style={{ width: "100%" }}>
+                    <Card.Grid
+                      style={{ width: "100%", height: "auto" }}
+                      onClick={() => showModal(item)}
+                    >
+                      <div className="card">
+                        <div className="photo">
+                          <img src={item.DoctorImageLink} />
+                        </div>
+                        <div className="name">
+                          <span>{item.DoctorName}</span>
+                        </div>
+                        <div className="email">
+                          <span>{item.DoctorEmail}</span>
+                        </div>
+                        <div className="phone">
+                          <span>{item.DoctorPoliclinicName}</span>
+                        </div>
+                      </div>
+                    </Card.Grid>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </div>
       </div>
     </>
   );
