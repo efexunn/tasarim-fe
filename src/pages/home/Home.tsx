@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DoctorManager } from "../../services/DoctorManager";
-import { Card, Col, Modal, Row, Select } from "antd";
+import { Card, Col, Modal, Pagination, Row, Select } from "antd";
 import "./home.scss";
 import PersonDetail from "../../components/person-detail/PersonDetail";
 import PoliclinicService from "../../services/PoliclinicManager";
@@ -33,6 +33,19 @@ const Home = () => {
   let [policlinicList, setPoliclinicList] = useState<Array<SelectModel>>();
   let [hospitalList, setHospitalList] = useState<Array<SelectModel>>();
   let [titleList, setTitleList] = useState<Array<SelectModel>>();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20; // Her sayfada gösterilecek öğe sayıs
+
+  const currentData = doctorList.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  // Sayfa değiştiğinde çalışacak olan fonksiyon
+  const onPageChange = (page: any) => {
+    setCurrentPage(page);
+  };
 
   const showModal = (item: DoctorModel) => {
     setDoctor(item);
@@ -171,7 +184,7 @@ const Home = () => {
         <div className="doctor-list">
           <div style={{ padding: "20px" }}>
             <Row gutter={[16, 16]}>
-              {doctorList.map((item) => (
+              {currentData.map((item) => (
                 <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
                   <Card style={{ width: "100%" }}>
                     <Card.Grid
@@ -198,6 +211,15 @@ const Home = () => {
               ))}
             </Row>
           </div>
+        </div>
+
+        <div className="paging-bar">
+          <Pagination
+            current={currentPage}
+            total={doctorList.length}
+            defaultPageSize={pageSize}
+            onChange={onPageChange}
+          />
         </div>
       </div>
     </>
