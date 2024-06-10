@@ -1,17 +1,27 @@
 import { UserOutlined } from "@ant-design/icons";
 import "./login.scss";
 import { useState } from "react";
+import AuthManager from "../../services/AuthManager";
 
 const Login = () => {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
+  let authService = new AuthManager();
 
-  let isValid = () => {
-    if (username === "efe" && password === "123") {
-      location.href = "/";
-    } else {
-      window.alert("Yanlış kullanıcı adı ve şifre");
-    }
+  let LoginUser = () => {
+    authService.LoginUser(username, password).then((response) => {
+      console.log(response);
+      if (response.data.authenticateResult) {
+        localStorage.setItem("auth_token", `${response.data.authToken}`);
+        localStorage.setItem("firstname", `${response.data.firstname}`);
+        localStorage.setItem("lastname", `${response.data.lastname}`);
+        localStorage.setItem("username", `${response.data.username}`);
+        localStorage.setItem("user_id", `${response.data.id}`);
+        location.href = "/";
+      } else {
+        window.alert("Kullanıcı bilgileri hatali");
+      }
+    });
   };
 
   return (
@@ -32,7 +42,8 @@ const Login = () => {
             type="password"
           />
         </div>
-        <button onClick={() => isValid()}>Giriş yap</button>
+        <button onClick={() => LoginUser()}>Giriş yap</button>
+        <a href="/register">Kayıt Ol</a>
       </div>
       <div className="project-name"></div>
     </div>

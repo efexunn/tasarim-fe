@@ -2,7 +2,7 @@ import axios from "axios";
 
 class TitleManager{
     GetTitles(){
-        return axios.get("https://localhost:44394/Home/GetTitles");
+        return axios.get("/api/HomeApi/GetTitles");
     }
 
     ConvertTitlesToSelectModel(titleList:Array<any>) : Array<SelectModel>{

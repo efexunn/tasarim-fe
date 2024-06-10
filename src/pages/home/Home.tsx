@@ -6,8 +6,8 @@ import PersonDetail from "../../components/person-detail/PersonDetail";
 import PoliclinicService from "../../services/PoliclinicManager";
 import HospitalManager from "../../services/HospitalManager";
 import TitleManager from "../../services/TitleManager";
-import Meta from "antd/es/card/Meta";
-import { SearchOutlined } from "@ant-design/icons";
+
+import { SearchOutlined, StarTwoTone } from "@ant-design/icons";
 
 const Home = () => {
   let [doctorList, setDoctorList] = useState<Array<any>>(new Array<any>());
@@ -33,6 +33,7 @@ const Home = () => {
   let [policlinicList, setPoliclinicList] = useState<Array<SelectModel>>();
   let [hospitalList, setHospitalList] = useState<Array<SelectModel>>();
   let [titleList, setTitleList] = useState<Array<SelectModel>>();
+  let [searchText, setSearchText] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 20; // Her sayfada gösterilecek öğe sayıs
@@ -60,17 +61,23 @@ const Home = () => {
 
   let handleFilter = () => {
     doctorService
-      .GetDoctorsFiltered(cityCategory, policlinicCategory, titleCategory)
+      .GetDoctorsFiltered(hospitalCategory, policlinicCategory, titleCategory)
       .then((response) => {
-        console.log(response);
+        setDoctorList(response.data);
       });
+  };
+
+  let handleSearch = () => {
+    doctorService.GetDoctorsByDoctorName(searchText).then((response) => {
+      setDoctorList(response.data);
+    });
   };
 
   useEffect(() => {
     doctorService
       .getDoctors()
       .then((response) => {
-        setDoctorList(JSON.parse(response.data));
+        setDoctorList(response.data);
       })
       .catch((err) => {
         console.log(err);
@@ -78,28 +85,32 @@ const Home = () => {
 
     policlinicService.GetPoliclinics().then((response: any) => {
       setPoliclinicList(
-        policlinicService.ConvertPoliclinicsToSelectModel(
-          JSON.parse(response.data)
-        )
+        policlinicService.ConvertPoliclinicsToSelectModel(response.data)
       );
     });
 
     hospitalService.GetHospitals().then((response: any) => {
       setHospitalList(
-        hospitalService.ConvertHospitalsToSelectModel(JSON.parse(response.data))
+        hospitalService.ConvertHospitalsToSelectModel(response.data)
       );
     });
 
     titleService.GetTitles().then((response) => {
-      setTitleList(
-        titleService.ConvertTitlesToSelectModel(JSON.parse(response.data))
-      );
+      setTitleList(titleService.ConvertTitlesToSelectModel(response.data));
     });
 
     //.then((response) => setLecturerList(response.data));
   }, []);
 
-  let [cityCategory, setCityCategory] = useState<any>();
+  let addFavorites = () => {
+    doctorService
+      .AddFavorites(localStorage.getItem("user_id"), doctor.Id)
+      .then((response) => {
+        window.alert(response.data);
+      });
+  };
+
+  let [hospitalCategory, setHospitalCategory] = useState<any>();
   let [titleCategory, setTitleCategory] = useState<any>();
   let [policlinicCategory, setPoliclinicCategory] = useState<any>();
 
@@ -108,8 +119,14 @@ const Home = () => {
       <div className="home">
         <div className="search-bar">
           <div className="search-bar-border">
-            <input type="text" />
-            <span>
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+              }}
+            />
+            <span onClick={() => handleSearch()}>
               <SearchOutlined />
             </span>
           </div>
@@ -125,10 +142,10 @@ const Home = () => {
               (option?.label ?? "").includes(input)
             }
             options={hospitalList}
-            value={cityCategory}
-            onChange={(cityCategory) => {
-              setCityCategory(cityCategory);
-              console.log(cityCategory);
+            value={hospitalCategory}
+            onChange={(hospitalCategory) => {
+              setHospitalCategory(hospitalCategory);
+              console.log(hospitalCategory);
             }}
           />
 
@@ -145,7 +162,6 @@ const Home = () => {
             value={titleCategory}
             onChange={(titleCategory) => {
               setTitleCategory(titleCategory);
-              console.log(titleCategory);
             }}
           />
 
@@ -162,7 +178,6 @@ const Home = () => {
             value={policlinicCategory}
             onChange={(policlinicCategory) => {
               setPoliclinicCategory(policlinicCategory);
-              console.log(policlinicCategory);
             }}
           />
           <button onClick={handleFilter}>Filtrele</button>
@@ -179,6 +194,21 @@ const Home = () => {
           }}
         >
           <PersonDetail doctorObj={doctor} />
+
+          <StarTwoTone
+            twoToneColor="#FA1C05"
+            style={{
+              fontSize: "40px",
+              display: "flex",
+              paddingTop: "25px",
+              paddingLeft: "25px",
+              paddingBottom: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              addFavorites();
+            }}
+          />
         </Modal>
 
         <div className="doctor-list">

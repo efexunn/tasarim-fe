@@ -2,7 +2,7 @@ import axios from "axios";
 
 class HospitalManager{
     GetHospitals(){
-        return axios.get("https://localhost:44394/Home/GetHospitals");
+        return axios.get("/api/HomeApi/GetHospitals");
     }
 
     ConvertHospitalsToSelectModel(hospitalList:Array<any>) : Array<SelectModel>{
