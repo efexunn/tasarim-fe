@@ -7,8 +7,15 @@ const Menu = () => {
     <div className="menu">
       <span onClick={() => (location.href = "/doctors")}>Doktorlar</span>
       <span>Akademisyenler</span>
-      <span>Benim Sayfam</span>
-      <span onClick={() => (location.href = "/admin-panel")}>Admin Panel</span>
+      <span onClick={() => (location.href = "/my-page")}>Benim Sayfam</span>
+      {localStorage.getItem("username") === "efe" ||
+      localStorage.getItem("username") === "cato" ? (
+        <span onClick={() => (location.href = "/admin-panel")}>
+          Admin Panel
+        </span>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };

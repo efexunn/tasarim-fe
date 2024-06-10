@@ -2,7 +2,7 @@ import axios from "axios";
 
 class PoliclinicManager{
     GetPoliclinics(){
-        return axios.get("https://localhost:44394/Home/GetPoliclinics");
+        return axios.get("/api/HomeApi/GetPoliclinics");
     }
 
     ConvertPoliclinicsToSelectModel(policlinicList:Array<any>) : Array<SelectModel>{
